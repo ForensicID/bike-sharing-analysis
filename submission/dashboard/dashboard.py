@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Fungsi untuk membaca data
 def load_data():
-    data_dir = Path("data/")
+    data_dir = Path("submission/data/")
     csv_files = list(data_dir.glob("*.csv"))
     df_list = []
     for file in csv_files:
