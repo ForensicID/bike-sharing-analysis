@@ -29,6 +29,23 @@ df = load_data()
 st.sidebar.title("Navigation")
 menu = st.sidebar.radio("Go to", ["Home", "Dataset", "Pertanyaan Satu", "Pertanyaan Dua", "Binning", "Kesimpulan"])
 
+# Date filter
+st.sidebar.title("Filters")
+start_date = st.sidebar.date_input("Start Date", value=pd.to_datetime("2011-01-01"))
+end_date = st.sidebar.date_input("End Date", value=pd.to_datetime("2012-12-31"))
+
+if start_date > end_date:
+    st.sidebar.error("End Date must be greater than Start Date")
+
+# Convert date inputs to datetime format
+start_date = pd.to_datetime(start_date)
+end_date = pd.to_datetime(end_date)
+
+# Filter data based on date
+if df is not None:
+    df["dteday"] = pd.to_datetime(df["dteday"])  # Ensure 'dteday' is in datetime format
+    df = df[(df["dteday"] >= start_date) & (df["dteday"] <= end_date)]
+
 # Home Page
 if menu == "Home":
     st.title("Proyek Analisis Data: Bike Sharing Dataset")
@@ -88,8 +105,7 @@ elif menu == "Pertanyaan Satu":
     
 # Pertanyaan Dua
 elif menu == "Pertanyaan Dua":
-    st.title("Pertanyaan Dua")
-    st.write("Analisis dan jawaban untuk pertanyaan kedua.")
+    st.title("Jam berapa biasanya rental sepeda paling ramai atau paling banyak digunakan?")
 
     # Langsung analisis dan visualisasi
     rental_per_hour = df.groupby("hr")["cnt"].min().reset_index()
